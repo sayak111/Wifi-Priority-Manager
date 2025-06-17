@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace WifiPriorityManager
 {
@@ -16,18 +8,13 @@ namespace WifiPriorityManager
         public MainForm()
         {
             InitializeComponent();
+            listBoxProfiles.AllowDrop = true;
+            listBoxProfiles.MouseDown += ListBoxProfiles_MouseDown;
+            listBoxProfiles.DragOver += ListBoxProfiles_DragOver;
+            listBoxProfiles.DragDrop += ListBoxProfiles_DragDrop;
+
         }
 
-        private void btnSetPriority_Click(object sender, EventArgs e)
-        {
-            if (listBoxProfiles.SelectedItem != null && int.TryParse(txtPriority.Text, out int priority))
-            {
-                string profile = listBoxProfiles.SelectedItem.ToString();
-                string cmd = $"wlan set profileorder name=\"{profile}\" interface=\"Wi-Fi\" priority={priority}";
-                RunNetshCommand(cmd);
-                MessageBox.Show($"Priority set for '{profile}' to {priority}");
-            }
-        }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -69,10 +56,6 @@ namespace WifiPriorityManager
             process.WaitForExit();
         }
 
-        private void txtPriority_TextChanged(object sender, EventArgs e)
-        {
-
-        }
 
         private void btnResetPriorities_Click(object sender, EventArgs e)
         {
@@ -86,6 +69,64 @@ namespace WifiPriorityManager
             }
 
             MessageBox.Show("Priorities have been reset (1, 2, 3...)");
+        }
+
+
+        private void ListBoxProfiles_MouseDown(object sender, MouseEventArgs e)
+        {
+            int index = listBoxProfiles.IndexFromPoint(e.X, e.Y);
+            if (index >= 0)
+            {
+                listBoxProfiles.DoDragDrop(listBoxProfiles.Items[index], DragDropEffects.Move);
+            }
+        }
+
+        private void ListBoxProfiles_DragOver(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+        }
+
+        private void ListBoxProfiles_DragDrop(object sender, DragEventArgs e)
+        {
+            Point point = listBoxProfiles.PointToClient(new Point(e.X, e.Y));
+            int index = listBoxProfiles.IndexFromPoint(point);
+
+            if (index < 0) index = listBoxProfiles.Items.Count - 1;
+
+            object data = e.Data.GetData(typeof(string));
+            listBoxProfiles.Items.Remove(data);
+            listBoxProfiles.Items.Insert(index, data);
+        }
+
+        private void btnSavePreset_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "Text Files|*.txt";
+            sfd.Title = "Save Wi-Fi Priority Preset";
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                File.WriteAllLines(sfd.FileName, listBoxProfiles.Items.Cast<string>());
+                MessageBox.Show("Preset saved.");
+            }
+        }
+
+        private void btnLoadPreset_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "Text Files|*.txt";
+            ofd.Title = "Load Wi-Fi Priority Preset";
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                var profiles = File.ReadAllLines(ofd.FileName);
+                listBoxProfiles.Items.Clear();
+                foreach (var profile in profiles)
+                {
+                    listBoxProfiles.Items.Add(profile);
+                }
+                MessageBox.Show("Preset loaded.");
+            }
         }
 
     }

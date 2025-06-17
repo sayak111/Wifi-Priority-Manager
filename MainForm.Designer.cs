@@ -29,51 +29,24 @@
         private void InitializeComponent()
         {
             listBoxProfiles = new ListBox();
-            txtPriority = new TextBox();
-            label1 = new Label();
-            btnSetPriority = new Button();
             btnResetPriorities = new Button();
+            btnSavePreset = new Button();
+            btnLoadPreset = new Button();
             SuspendLayout();
             // 
             // listBoxProfiles
             // 
             listBoxProfiles.FormattingEnabled = true;
             listBoxProfiles.ItemHeight = 15;
-            listBoxProfiles.Location = new Point(240, 52);
+            listBoxProfiles.Location = new Point(223, 1);
             listBoxProfiles.Name = "listBoxProfiles";
-            listBoxProfiles.Size = new Size(120, 94);
+            listBoxProfiles.Size = new Size(167, 154);
             listBoxProfiles.TabIndex = 0;
-            // 
-            // txtPriority
-            // 
-            txtPriority.Location = new Point(470, 94);
-            txtPriority.Name = "txtPriority";
-            txtPriority.Size = new Size(100, 23);
-            txtPriority.TabIndex = 1;
-            txtPriority.TextChanged += txtPriority_TextChanged;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(366, 97);
-            label1.Name = "label1";
-            label1.Size = new Size(98, 15);
-            label1.TabIndex = 2;
-            label1.Text = "Priority (1, 2, 3...):";
-            // 
-            // btnSetPriority
-            // 
-            btnSetPriority.Location = new Point(366, 123);
-            btnSetPriority.Name = "btnSetPriority";
-            btnSetPriority.Size = new Size(75, 23);
-            btnSetPriority.TabIndex = 3;
-            btnSetPriority.Text = "Set Priority";
-            btnSetPriority.UseVisualStyleBackColor = true;
-            btnSetPriority.Click += btnSetPriority_Click;
+            listBoxProfiles.SelectedIndexChanged += listBoxProfiles_SelectedIndexChanged;
             // 
             // btnResetPriorities
             // 
-            btnResetPriorities.Location = new Point(486, 123);
+            btnResetPriorities.Location = new Point(260, 190);
             btnResetPriorities.Name = "btnResetPriorities";
             btnResetPriorities.Size = new Size(75, 23);
             btnResetPriorities.TabIndex = 4;
@@ -81,29 +54,46 @@
             btnResetPriorities.UseVisualStyleBackColor = true;
             btnResetPriorities.Click += btnResetPriorities_Click;
             // 
+            // btnSavePreset
+            // 
+            btnSavePreset.Location = new Point(223, 161);
+            btnSavePreset.Name = "btnSavePreset";
+            btnSavePreset.Size = new Size(75, 23);
+            btnSavePreset.TabIndex = 5;
+            btnSavePreset.Text = "Save Preset";
+            btnSavePreset.UseVisualStyleBackColor = true;
+            btnSavePreset.Click += btnSavePreset_Click;
+            // 
+            // btnLoadPreset
+            // 
+            btnLoadPreset.Location = new Point(304, 161);
+            btnLoadPreset.Name = "btnLoadPreset";
+            btnLoadPreset.Size = new Size(86, 23);
+            btnLoadPreset.TabIndex = 6;
+            btnLoadPreset.Text = "Load Preset";
+            btnLoadPreset.UseVisualStyleBackColor = true;
+            btnLoadPreset.Click += btnLoadPreset_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(btnLoadPreset);
+            Controls.Add(btnSavePreset);
             Controls.Add(btnResetPriorities);
-            Controls.Add(btnSetPriority);
-            Controls.Add(label1);
-            Controls.Add(txtPriority);
             Controls.Add(listBoxProfiles);
             Name = "MainForm";
             Text = "MainForm";
             Load += MainForm_Load;
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
 
         private ListBox listBoxProfiles;
-        private TextBox txtPriority;
-        private Label label1;
-        private Button btnSetPriority;
         private Button btnResetPriorities;
+        private Button btnSavePreset;
+        private Button btnLoadPreset;
     }
 }
